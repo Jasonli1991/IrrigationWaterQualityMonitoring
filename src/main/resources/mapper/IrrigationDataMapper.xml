@@ -1,0 +1,30 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.IrrigationDataMapper">
+
+    <!-- 刪除所有數據 -->
+    <delete id="deleteAllIrrigationData">
+        TRUNCATE irrigation_data
+    </delete>
+
+    <resultMap id="IrrigationDataResultMap" type="com.example.model.IrrigationData">
+        <id column="id" property="id" />
+        <result column="management_name" property="managementName" />
+        <result column="station" property="station" />
+        <result column="name" property="name" />
+        <result column="sampling_date" property="samplingDate" />
+        <result column="water_temperature" property="waterTemperature" />
+        <result column="ph_value" property="pHValue" />
+        <result column="ec_value" property="ecValue" />
+        <result column="remarks" property="remarks" />
+    </resultMap>
+
+    <insert id="insertIrrigationData" parameterType="com.example.model.IrrigationData">
+        INSERT INTO irrigation_data (management_name, station, name, sampling_date, water_temperature, ph_value, ec_value, remarks)
+        VALUES (#{managementName}, #{station}, #{name}, #{samplingDate}, #{waterTemperature}, #{pHValue}, #{ecValue}, #{remarks})
+    </insert>
+
+    <select id="getAllIrrigationData" resultMap="IrrigationDataResultMap">
+        SELECT * FROM irrigation_data
+    </select>
+
+</mapper>
