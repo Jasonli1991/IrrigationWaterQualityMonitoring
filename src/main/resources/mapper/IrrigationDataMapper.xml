@@ -27,4 +27,16 @@
         SELECT * FROM irrigation_data
     </select>
 
+    <!-- 獲取所有站點的列表 -->
+    <select id="getDistinctStations" resultType="java.lang.String">
+        SELECT DISTINCT station FROM irrigation_data
+    </select>
+
+    <!-- 根據站點獲取最新的數據 -->
+    <select id="getLatestDataByStation" resultMap="IrrigationDataResultMap">
+        SELECT * FROM irrigation_data
+        WHERE station = #{station}
+        ORDER BY sampling_date DESC
+            LIMIT 1
+    </select>
 </mapper>

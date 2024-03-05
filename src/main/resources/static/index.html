@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Station Data Viewer</title>
+</head>
+<body>
+
+<h2>Station Data Viewer</h2>
+
+<label for="stations">Choose a station:</label>
+<select id="stations" onchange="loadStationData()">
+    <!-- The options will be populated dynamically using JavaScript -->
+</select>
+
+<div id="stationData">
+    <!-- The selected station's data will be displayed here -->
+</div>
+
+<script>
+    // Populate stations dropdown on page load
+    window.onload = function () {
+        loadStations();
+    };
+
+    function loadStations() {
+        // Fetch the list of stations from your API endpoint
+        fetch('/api/stations')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('API response:', data);  // 添加這行調試語句
+                // Populate the dropdown with station names
+                const stationsDropdown = document.getElementById('stations');
+                data.forEach(station => {
+                    const option = document.createElement('option');
+                    option.value = station;
+                    option.text = station;
+                    stationsDropdown.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching stations:', error));
+    }
+
+    function loadStationData() {
+        const selectedStation = document.getElementById('stations').value;
+
+        // Fetch data for the selected station from your API endpoint
+        fetch(`/api/station-data/${selectedStation}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('API response:', data);  // 添加這行調試語句
+                // Display the selected station's data
+                const stationDataDiv = document.getElementById('stationData');
+
+                // 修改這些調試語句
+                console.log('Name:', data.名稱);
+                console.log('Sampling Date:', data.採樣日期);
+                console.log('pH Value:', data.pH值);
+
+                stationDataDiv.innerHTML = `
+                <h3>${selectedStation}</h3>
+                <p>Name: ${data.名稱}</p>
+                <p>Sampling Date: ${data.採樣日期}</p>
+                <p>pH Value: ${data.pH值}</p>
+            `;
+            })
+            .catch(error => console.error('Error fetching station data:', error));
+    }
+
+
+
+</script>
+
+</body>
+</html>
